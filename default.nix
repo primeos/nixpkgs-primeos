@@ -5,12 +5,12 @@ self: super:
 
 {
   wlroots = super.wlroots.overrideAttrs (oldAttrs: {
-    name = "wlroots-unstable-2018-04-08";
+    name = "wlroots-unstable-2018-05-13";
     src = super.fetchFromGitHub {
       owner = "swaywm";
       repo = "wlroots";
-      rev = "ba5c0903f9c288e7b617e537ef80eed2a42e08ed";
-      sha256 = "0jldmp5zgndyiz9bqxxck60910gb1i42pgfzvaxh97rgj4jhhkz8";
+      rev = "383ce3d5b73c54c3f9f1c90576df3277ebd2eee7";
+      sha256 = "0qykhjx14aa1r4l0crzaprvg24ivjq8vsawanx7g4drkia0521cv";
     };
     meta = oldAttrs.meta // {
       broken = false;
@@ -18,21 +18,13 @@ self: super:
   });
   sway = super.sway.overrideAttrs (oldAttrs: rec {
     name = "sway-${version}";
-    version = "1.0-alpha.1";
+    version = "1.0-alpha.2";
     src = super.fetchFromGitHub {
       owner = "swaywm";
       repo = "sway";
       rev = version;
-      sha256 = "0nbl8py2bra5px86z71v0fh3gnmh877a0nn9lbxnrw5zwcys5b46";
+      sha256 = "0578sw8spfg4fb2jkk0xdfb1jlyn80208lhnqmsjr10b0r2ql4g7";
     };
-    patches = [
-      ./sway.patch
-      (self.fetchpatch {
-        name = "set-POSIX-C-SOURCE-properly.patch";
-        url = "https://github.com/swaywm/sway/pull/1815/commits/0d67d56c2ab10573e8d19f4e330303215d2aef69.patch";
-        sha256 = "0x093p0rakxr6mbdmcgzn0hlqxpm35gymh0rwjfzwjbq6j85mdjz";
-      })
-    ];
     postPatch = ''
       substituteInPlace meson.build --replace \
         "werror=true" "werror=false"
@@ -41,6 +33,7 @@ self: super:
     nativeBuildInputs = with super; [
       meson pkgconfig ninja
     ]; #++ stdenv.lib.optional buildDocs [ asciidoc libxslt docbook_xsl ];
+    # TODO: Replace asciidoc with scdoc
     buildInputs = with super; [
       json_c pcre self.wlroots wayland xwayland libxkbcommon cairo pango
       gdk_pixbuf libcap libinput pam
