@@ -12,27 +12,37 @@ self: super:
       rev = "2a58d4467f83c5660bbee6733a73cc1ed92ca478";
       sha256 = "16h59jglnn1y4h0q71200i429pl1qv3b93ygr7zkvzpsgnm9vci0";
     };
+    # $out for the library, $bin for rootston, and $examples for the example
+    # programs (in examples) AND rootston
+    outputs = [ "out" "bin" "examples" ];
     buildInputs = (with super; [
       wayland libGL wayland-protocols libinput libxkbcommon
       pixman libcap mesa_noglu
       libpng ffmpeg_4 ])
       ++ (with super.xorg; [ xcbutilwm libX11 xcbutilimage xcbutilerrors ]);
     postInstall = ''
-      # Install rootston (the reference compositor) to $bin
-      mkdir -p $bin/bin
-      cp rootston/rootston $bin/bin/
-      mkdir $bin/lib
-      cp libwlroots* $bin/lib/
-      patchelf --set-rpath "$bin/lib:${super.lib.makeLibraryPath buildInputs}" $bin/bin/rootston
-      mkdir $bin/etc
-      cp ../rootston/rootston.ini.example $bin/etc/rootston.ini
-      # Install screencopy and dmabuf-capture.
-      # TODO: There are also the following binaries:
-      # input-inhibitor layer-shell idle-inhibit idle screenshot output-layout
-      # multi-pointer rotation tablet touch pointer simple
-      mkdir -p $out/bin
-      for binary in "screencopy" "dmabuf-capture"; do
-        cp examples/$binary $bin/bin/
+      # Install rootston (the reference compositor) to $bin and $examples
+      for output in "$bin" "$examples"; do
+        mkdir -p $output/bin
+        cp rootston/rootston $output/bin/
+        mkdir $output/lib
+        cp libwlroots* $output/lib/
+        patchelf \
+          --set-rpath "$output/lib:${super.lib.makeLibraryPath buildInputs}" \
+          $output/bin/rootston
+        mkdir $output/etc
+        cp ../rootston/rootston.ini.example $output/etc/rootston.ini
+      done
+      # Install ALL example programs to $examples:
+      # screencopy dmabuf-capture input-inhibitor layer-shell idle-inhibit idle
+      # screenshot output-layout multi-pointer rotation tablet touch pointer
+      # simple
+      mkdir -p $examples/bin
+      for binary in $(find ./examples -executable -type f | grep -vE '\.so'); do
+        patchelf \
+          --set-rpath "$examples/lib:${super.lib.makeLibraryPath buildInputs}" \
+          "$binary"
+        cp "$binary" $examples/bin/
       done
     '';
     meta = oldAttrs.meta // {
