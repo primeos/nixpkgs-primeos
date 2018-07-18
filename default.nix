@@ -65,8 +65,9 @@ self: super:
     mesonFlags = [ "-Dsway_version=${version}" ];
     nativeBuildInputs = with super; [
       meson pkgconfig ninja
-    ]; #++ stdenv.lib.optional buildDocs [ asciidoc libxslt docbook_xsl ];
-    # TODO: Replace asciidoc with scdoc
+      # ++ stdenv.lib.optional buildDocs
+      scdoc
+    ];
     buildInputs = with super; [
       json_c pcre self.wlroots wayland xwayland
       libxkbcommon cairo pango gdk_pixbuf libcap libinput pam
