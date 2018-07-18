@@ -4,7 +4,7 @@
 self: super:
 
 {
-  wlroots = super.wlroots.overrideAttrs (oldAttrs: {
+  wlroots = super.wlroots.overrideAttrs (oldAttrs: rec {
     name = "wlroots-unstable-2018-07-17";
     src = super.fetchFromGitHub {
       owner = "swaywm";
@@ -17,6 +17,24 @@ self: super:
       pixman libcap mesa_noglu
       libpng ffmpeg_4 ])
       ++ (with super.xorg; [ xcbutilwm libX11 xcbutilimage xcbutilerrors ]);
+    postInstall = ''
+      # Install rootston (the reference compositor) to $bin
+      mkdir -p $bin/bin
+      cp rootston/rootston $bin/bin/
+      mkdir $bin/lib
+      cp libwlroots* $bin/lib/
+      patchelf --set-rpath "$bin/lib:${super.lib.makeLibraryPath buildInputs}" $bin/bin/rootston
+      mkdir $bin/etc
+      cp ../rootston/rootston.ini.example $bin/etc/rootston.ini
+      # Install screencopy and dmabuf-capture.
+      # TODO: There are also the following binaries:
+      # input-inhibitor layer-shell idle-inhibit idle screenshot output-layout
+      # multi-pointer rotation tablet touch pointer simple
+      mkdir -p $out/bin
+      for binary in "screencopy" "dmabuf-capture"; do
+        cp examples/$binary $bin/bin/
+      done
+    '';
     meta = oldAttrs.meta // {
       broken = false;
     };
