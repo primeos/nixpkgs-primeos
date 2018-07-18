@@ -14,7 +14,8 @@ self: super:
     };
     buildInputs = (with super; [
       wayland libGL wayland-protocols libinput libxkbcommon
-      pixman libcap mesa_noglu ])
+      pixman libcap mesa_noglu
+      libpng ffmpeg_4 ])
       ++ (with super.xorg; [ xcbutilwm libX11 xcbutilimage xcbutilerrors ]);
     meta = oldAttrs.meta // {
       broken = false;
