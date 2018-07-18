@@ -55,12 +55,12 @@ self: super:
     };
   };
   wlroots = super.wlroots.overrideAttrs (oldAttrs: {
-    name = "wlroots-unstable-2018-06-09";
+    name = "wlroots-unstable-2018-07-17";
     src = super.fetchFromGitHub {
       owner = "swaywm";
       repo = "wlroots";
-      rev = "9a1f0e2d5fe56870f3bd7d12113742766e89f4e6";
-      sha256 = "03ac6xhmrrjbyf9qzjg7ky4a63isykwhnshynjp25bzy1kd0hzcp";
+      rev = "2a58d4467f83c5660bbee6733a73cc1ed92ca478";
+      sha256 = "16h59jglnn1y4h0q71200i429pl1qv3b93ygr7zkvzpsgnm9vci0";
     };
     buildInputs = (with super; [
       self.wayland_1_15 libGL self.wayland-protocols_1_14 libinput libxkbcommon
@@ -72,12 +72,12 @@ self: super:
   });
   sway = super.sway.overrideAttrs (oldAttrs: rec {
     name = "sway-${version}";
-    version = "1.0-alpha.3";
+    version = "1.0-alpha.4";
     src = super.fetchFromGitHub {
       owner = "swaywm";
       repo = "sway";
       rev = version;
-      sha256 = "035b8ih630c746x0nxdh72zcin0xfdx01z3znz63959nvcm0nzk2";
+      sha256 = "0ki6f2b2z4fi8jibdaggjfzs4xaw3zllvc4k4la4rj55kbq7m64c";
     };
     postPatch = ''
       substituteInPlace meson.build --replace \
