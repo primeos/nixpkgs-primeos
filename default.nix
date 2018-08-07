@@ -5,12 +5,12 @@ self: super:
 
 {
   wlroots = super.wlroots.overrideAttrs (oldAttrs: rec {
-    name = "wlroots-unstable-2018-07-17";
+    name = "wlroots-unstable-2018-08-06";
     src = super.fetchFromGitHub {
       owner = "swaywm";
       repo = "wlroots";
-      rev = "2a58d4467f83c5660bbee6733a73cc1ed92ca478";
-      sha256 = "16h59jglnn1y4h0q71200i429pl1qv3b93ygr7zkvzpsgnm9vci0";
+      rev = "28b0a4065b8d37b5301fb75377f1859b1b08af0b";
+      sha256 = "07y7y11jaxaf55gdigz7r41868vgz3fdfrlngr4w29942lnbfl0v";
     };
     # $out for the library, $bin for rootston, and $examples for the example
     # programs (in examples) AND rootston
@@ -51,12 +51,12 @@ self: super:
   });
   sway = super.sway.overrideAttrs (oldAttrs: rec {
     name = "sway-${version}";
-    version = "1.0-alpha.4";
+    version = "1.0-alpha.5";
     src = super.fetchFromGitHub {
       owner = "swaywm";
       repo = "sway";
       rev = version;
-      sha256 = "0ki6f2b2z4fi8jibdaggjfzs4xaw3zllvc4k4la4rj55kbq7m64c";
+      sha256 = "0v2fnvx9z1727cva46j4zrlph8wwvkgb1gqgy9hzizbwixf387sl";
     };
     postPatch = ''
       substituteInPlace meson.build --replace \
