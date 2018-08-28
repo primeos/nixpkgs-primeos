@@ -5,12 +5,12 @@ self: super:
 
 {
   wlroots = super.wlroots.overrideAttrs (oldAttrs: rec {
-    name = "wlroots-unstable-2018-08-06";
+    name = "wlroots-unstable-2018-08-11";
     src = super.fetchFromGitHub {
       owner = "swaywm";
       repo = "wlroots";
-      rev = "28b0a4065b8d37b5301fb75377f1859b1b08af0b";
-      sha256 = "07y7y11jaxaf55gdigz7r41868vgz3fdfrlngr4w29942lnbfl0v";
+      rev = "4ed6ee0a4d112711c3764b9b5d0d44ec916fb48a";
+      sha256 = "02z52s50whlzw4ard9r90xiiadhhax6iiap33xm4d2bfjbds8fjx";
     };
     # $out for the library, $bin for rootston, and $examples for the example
     # programs (in examples) AND rootston
