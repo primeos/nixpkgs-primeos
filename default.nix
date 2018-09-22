@@ -4,17 +4,32 @@
 self: super:
 
 {
+  meson471 = super.meson.overrideAttrs (oldAttrs: rec {
+    name = pname + "-" + version;
+    pname = "meson";
+    version = "0.47.1";
+
+    src = super.python3Packages.fetchPypi {
+      inherit pname version;
+      sha256 = "090vap8bckllg4k58j65jm6472qp53l49iacy0gpcykcxirjbxwp";
+    };
+  });
   wlroots = super.wlroots.overrideAttrs (oldAttrs: rec {
-    name = "wlroots-unstable-2018-08-11";
+    name = "wlroots-unstable-2018-09-19";
     src = super.fetchFromGitHub {
       owner = "swaywm";
       repo = "wlroots";
-      rev = "4ed6ee0a4d112711c3764b9b5d0d44ec916fb48a";
-      sha256 = "02z52s50whlzw4ard9r90xiiadhhax6iiap33xm4d2bfjbds8fjx";
+      rev = "842368ec983cdf671cf16f5be51633392ed52d5e";
+      sha256 = "0cnndpv0s6502s2a2a4nm2az752fkdzcpp6v973dn69gv9rijnyp";
     };
     # $out for the library, $bin for rootston, and $examples for the example
     # programs (in examples) AND rootston
     outputs = [ "out" "bin" "examples" ];
+    mesonFlags = [
+      "-Dlibcap=enabled" "-Dlogind=enabled" "-Dxwayland=enabled" "-Dx11-backend=enabled"
+      "-Dxcb-icccm=enabled" "-Dxcb-xkb=enabled" "-Dxcb-errors=enabled"
+    ];
+    nativeBuildInputs = [ self.meson471 super.ninja super.pkgconfig ];
     buildInputs = (with super; [
       wayland libGL wayland-protocols libinput libxkbcommon
       pixman libcap mesa_noglu
@@ -51,18 +66,18 @@ self: super:
   });
   sway = super.sway.overrideAttrs (oldAttrs: rec {
     name = "sway-${version}";
-    version = "1.0-alpha.5";
+    version = "1.0-alpha.6";
     src = super.fetchFromGitHub {
       owner = "swaywm";
       repo = "sway";
       rev = version;
-      sha256 = "0v2fnvx9z1727cva46j4zrlph8wwvkgb1gqgy9hzizbwixf387sl";
+      sha256 = "0358c4ga8jm45apqck1y3hqws4qxnsf8z8r881q905b9g54nli8k";
     };
     postPatch = ''
       substituteInPlace meson.build --replace \
         "werror=true" "werror=false"
     '';
-    mesonFlags = [ "-Dsway_version=${version}" ];
+    mesonFlags = [ "-Dsway-version=${version}" ];
     nativeBuildInputs = with super; [
       meson pkgconfig ninja
       # ++ stdenv.lib.optional buildDocs
