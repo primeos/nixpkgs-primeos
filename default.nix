@@ -17,4 +17,20 @@ self: super:
     mesonFlags = oldAttrs.mesonFlags ++ [ "-Dfreerdp=enabled" ];
     postPatch = "";
   });
+  sway = super.sway.overrideAttrs (oldAttrs: rec {
+    name = "sway-${version}";
+    version = "1.1-rc1";
+    src = super.fetchFromGitHub {
+      owner = "swaywm";
+      repo = "sway";
+      rev = version;
+      sha256 = "036gx8zzsfhj89w8i7vdmzcw18b0220l2wg1pqmspk006hbd4sd6";
+    };
+    patches = builtins.filter
+      (str: !(super.lib.hasSuffix "bcde298a719f60b9913133dbd2a169dedbc8dd7d.patch" str))
+      oldAttrs.patches;
+    postPatch = ''
+      sed -iE "s/version: '1.0'/version: '${version}'/" meson.build
+    '';
+  });
 }
