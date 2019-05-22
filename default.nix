@@ -19,12 +19,12 @@ self: super:
   });
   sway = super.sway.overrideAttrs (oldAttrs: rec {
     name = "sway-${version}";
-    version = "1.1-rc2";
+    version = "1.1-rc3";
     src = super.fetchFromGitHub {
       owner = "swaywm";
       repo = "sway";
       rev = version;
-      sha256 = "1p6fc861k2qb4sv4vck75qhxx2kw2ky095y9b5c0c50l1cz293rh";
+      sha256 = "12w79wwqx0bhi3rvj9wj7pv1lqm5nf7hzspbrnl1ddavmc55xkr8";
     };
     patches = builtins.filter
       (str: !(super.lib.hasSuffix "bcde298a719f60b9913133dbd2a169dedbc8dd7d.patch" str))
