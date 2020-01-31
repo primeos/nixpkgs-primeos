@@ -4,4 +4,5 @@
 self: super:
 
 {
+  tinywl = super.callPackage ./pkgs/tinywl { };
 }
